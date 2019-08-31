@@ -1,6 +1,6 @@
 
 
-console.log('--- main.js');
+console.log('--- background.js');
 
 chrome.webRequest.onBeforeRequest.addListener(
   function(a,b) {
@@ -22,3 +22,14 @@ chrome.webRequest.onBeforeRequest.addListener(
   },
   ["blocking"]
 );
+
+// add click handler to top-sidebar's image toggle
+chrome.runtime.onMessage.addListener(
+  function(message, callback) {
+      chrome.tabs.executeScript({
+        code: `setTimeout(()=>
+jQuery('.top-sidebar h2.expand-toggle').click(function(){
+jQuery(this).next().slideToggle();
+}), 1000);`
+      });
+ });

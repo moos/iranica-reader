@@ -17,10 +17,11 @@ Install it from [Chrome web store](https://chrome.google.com/webstore/detail/ira
 * Collapse date and date ranges to only show Gregorian dates (Islamic dates are shown on mouse hover)
 * Splits long paragraphs
 * Larger font and wider paragraphs
+* Lightbox images using [strip](http://www.stripjs.com/)
 
 ### Features in the works
-* Lightbox images (no page change) using [strip](http://www.stripjs.com/)
 * Options page (maybe?)
+* Handle `(q.v.)` refs
 
 ## Caveats
 
@@ -30,6 +31,7 @@ If you notice something odd, temporarily disable the extension, or open the page
 
 ## Change log
 
+- 0.3.0 - Added lightbox image viewer
 - 0.1.2 - Initial version
 
 

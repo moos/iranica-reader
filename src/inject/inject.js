@@ -7,6 +7,7 @@
 
 console.log('inject.js -- ', $.fn)
 
+
 chrome.extension.sendMessage({}, function(response) {
   var readyStateCheckInterval = setInterval(function() {
     if (document.readyState === "complete") {
@@ -90,7 +91,7 @@ function run() {
   //
   // add footnotes
   //
-  if (!bib) console.warn('No bibliography section found!');
+  if (!bib) console.log('No bibliography section found!');
   else {
     let str = '';
     notes.forEach((note, n) => {
@@ -183,13 +184,19 @@ function doImages() {
 	let h2 = ai.querySelector('h2');
 	if (h2) h2.innerHTML = sba.length + ' ' + h2.innerHTML;
 
+  if (!sba.length) return;
+
 	// move sidebar thumbnails to top
 	let ref = document.querySelector('#content');
+	let div = document.createElement('div');
 	let el = document.createElement('div');
 	el.setAttribute('id', 'sidebar');
 	el.className = 'top-sidebar';
-	el.appendChild(ai);
-	ref.parentNode.insertBefore(el, ref);
+	el.appendChild(ai.cloneNode(true));
+
+	ref.parentNode.insertBefore(div, ref);
+	div.appendChild(el);
+	div.appendChild(ref);
 }
 
 function addExtMarker() {
