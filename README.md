@@ -6,7 +6,7 @@ Install it from [Chrome web store](https://chrome.google.com/webstore/detail/ira
 
 ## Screenshots
 
-![sample article](./web-store/images/iranica-sample-article-1.png)
+![sample article](./web-store/images/iranica-sample-article-1.png)[]()
 
 ## List of features
 
