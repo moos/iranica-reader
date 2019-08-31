@@ -4,6 +4,10 @@ Chrome extension for making [Encyclopædia Iranica](http://www.iranicaonline.org
 
 Install it from [Chrome web store](https://chrome.google.com/webstore/detail/iranica-reader/cicchdojpmpeipimmafllabaedlopopm).
 
+## Screenshots
+
+![sample article](./web-store/images/iranica-sample-article-1.png)
+
 ## List of features
 
 * Removes noisy transliteration diacritics (using [latinize](https://github.com/dundalek/latinize))
