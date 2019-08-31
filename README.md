@@ -19,7 +19,7 @@ Install it from [Chrome web store](https://chrome.google.com/webstore/detail/ira
 * Larger font and wider paragraphs
 
 ### Features in the works
-* Lightbox images (no page change)
+* Lightbox images (no page change) using [strip](http://www.stripjs.com/)
 * Options page (maybe?)
 
 ## Caveats
