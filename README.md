@@ -1,11 +1,12 @@
 # iranica-reader
-Chrome extension for making [http://www.iranicaonline.org/](Encyclopædia Iranica) articles easier to read online.
+Chrome extension for making [Encyclopædia Iranica](http://www.iranicaonline.org/) articles easier to read online.
+
 
 Find it in Chrome Stores (coming soon).
 
 ## List of features
 
-* Removes noisy transliteration diacritics (using [https://github.com/dundalek/latinize](latinize))
+* Removes noisy transliteration diacritics (using [latinize](https://github.com/dundalek/latinize))
 * Makes section headers clearly visible
 * Moves in-text citation to linked footnote
 * Adds collapsible footnotes section at the end
@@ -24,4 +25,4 @@ If you notice something odd, temporarily disable the extension, or open the page
 
 ## License
 
-MIT 
+MIT
