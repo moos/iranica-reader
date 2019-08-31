@@ -5,6 +5,8 @@
  */
 
 
+console.log('inject.js -- ', $.fn)
+
 chrome.extension.sendMessage({}, function(response) {
   var readyStateCheckInterval = setInterval(function() {
     if (document.readyState === "complete") {
@@ -14,9 +16,10 @@ chrome.extension.sendMessage({}, function(response) {
   }, 100);
 });
 
+let $$ = document.querySelectorAll.bind(document);
+
 
 function run() {
-  let $$ = document.querySelectorAll.bind(document);
   let article = document.querySelector('#article-overview');
   if (!article) return;
 
@@ -84,7 +87,6 @@ function run() {
     });
   });
 
-
   //
   // add footnotes
   //
@@ -149,10 +151,46 @@ function run() {
   // TODO
   //   images are lightbox
 
+  doImages();
   addExtMarker();
 }
 
+// https://stackoverflow.com/questions/5499078/fastest-method-to-escape-html-tags-as-html-entities
+function escapeHTML(html) {
+    return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
+}
 
+function doImages() {
+	// content images
+	$$('#content a[href*=".jpg"]').forEach(anchor => {
+		anchor.classList.add('strip');
+		anchor.setAttribute('data-strip-group', 'iranica-reader-article');
+		anchor.setAttribute('data-strip-group-options', 'loop: false');
+		anchor.setAttribute('data-strip-caption', escapeHTML(anchor.innerHTML));
+	});
+
+	// sidebar thumbnails
+	let sba = $$('#article-images ul a[rel="pretty[sidebar]"]');
+	sba.forEach(anchor => {
+		anchor.classList.add('strip');
+		anchor.setAttribute('data-strip-group', 'iranica-reader-sidebar');
+		anchor.setAttribute('data-strip-group-options', 'loop: false');
+		anchor.setAttribute('data-strip-caption', escapeHTML(anchor.title));
+	});
+
+  // add counter
+	let ai = document.querySelector('#article-images');
+	let h2 = ai.querySelector('h2');
+	if (h2) h2.innerHTML = sba.length + ' ' + h2.innerHTML;
+
+	// move sidebar thumbnails to top
+	let ref = document.querySelector('#content');
+	let el = document.createElement('div');
+	el.setAttribute('id', 'sidebar');
+	el.className = 'top-sidebar';
+	el.appendChild(ai);
+	ref.parentNode.insertBefore(el, ref);
+}
 
 function addExtMarker() {
   let marker = document.createElement('div');

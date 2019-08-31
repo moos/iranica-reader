@@ -1,6 +1,9 @@
 /**
-* Place your custom CSS styles here.
-**/
+ * iranica-reader
+ *
+ * (c) Copyright 2019, mooster@42at.com
+ */
+
 
 
 html body.iranica-reader #content.article {
@@ -36,4 +39,11 @@ html body.iranica-reader #ornament {
 html body.iranica-reader #header h1 {
   /* filter: blur(20px) grayscale(20%); */
   filter: invert(0.8);
+}
+
+html body.iranica-reader .top-sidebar {
+  margin-top: -20;
+}
+html body.iranica-reader #article-images {
+  padding: 10px 20px;
 }
