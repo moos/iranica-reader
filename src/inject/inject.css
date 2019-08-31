@@ -1,0 +1,39 @@
+/**
+* Place your custom CSS styles here.
+**/
+
+
+html body.iranica-reader #content.article {
+ width: 720px;
+ font-size: 17px;
+ line-height: 1.3rem;
+}
+
+html body.iranica-reader abbr[title] {
+ text-decoration-line: underline;
+ text-underline-position: under;
+ text-decoration-color: #1fc08a;
+}
+
+.iranica-reader-marker {
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: .5em 1em;
+  color: #aab3bc;
+  font-size: 14px;
+}
+
+html body.iranica-reader {
+  background: none;
+  background-color: #2c2c2c !important;
+}
+
+html body.iranica-reader #ornament {
+  background: none;
+}
+
+html body.iranica-reader #header h1 {
+  /* filter: blur(20px) grayscale(20%); */
+  filter: invert(0.8);
+}
