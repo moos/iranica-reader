@@ -2,7 +2,7 @@
 Chrome extension for making [Encyclopædia Iranica](http://www.iranicaonline.org/) articles easier to read online.
 
 
-Find it in Chrome Stores (coming soon).
+Install it from [Chrome web store](https://chrome.google.com/webstore/detail/iranica-reader/cicchdojpmpeipimmafllabaedlopopm).
 
 ## List of features
 
@@ -12,6 +12,7 @@ Find it in Chrome Stores (coming soon).
 * Adds collapsible footnotes section at the end
 * Collapse date and date ranges to only show Gregorian dates (Islamic dates are shown on mouse hover)
 * Splits long paragraphs
+* Larger font and wider paragraphs
 
 ### Features in the works
 * Lightbox images (no page change)
@@ -22,6 +23,11 @@ Find it in Chrome Stores (coming soon).
 Much of the reformatting is done via regular expressions and not all the articles follow a strict format or have correct markup.  
 
 If you notice something odd, temporarily disable the extension, or open the page in incognito mode.
+
+## Change log
+
+- 0.1.2 - Initial version
+
 
 ## License
 
