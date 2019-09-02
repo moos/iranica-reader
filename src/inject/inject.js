@@ -5,9 +5,6 @@
  */
 
 
-console.log('inject.js -- ', $.fn)
-
-
 chrome.extension.sendMessage({}, function(response) {
   var readyStateCheckInterval = setInterval(function() {
     if (document.readyState === "complete") {
@@ -25,45 +22,88 @@ function run() {
   if (!article) return;
 
   document.body.className += ' iranica-reader';
-  console.log('Iranica reader loaded for:',
+  console.log('Iranica reader loaded for article:',
     (article.textContent || '').trim()
   );
 
   // extend latinize
   latinize.characters['š'] = 'sh';
 
-  let contentPs = $$('#content p');
+  let contentPs = Array.from($$('#content p'));
 
   //
   // section headers
   //  <p><em>foo</em>.  content....
-  //  <p><a name></a>fooo</p>
   //
-  let bib;
-  contentPs.forEach(p => {
+  let bib, bibDone = false;
+	let bibdiv = document.createElement('details');
+	bibdiv.className = 'bibliography';
+	bibdiv.innerHTML = '<summary><b>Bibliography</b></summary>';
+
+  contentPs.some(p => {
     let em = p.firstChild;
-    if (!em ||
+		let isbib;
+    if (!(isbib = /^bibliography/i.test(p.innerText)) &&
+			(!em ||
       !(em.nodeName === 'EM' || (em.nodeName === 'A' && em.attributes.name)) ||
-      (/\(/.test(em.textContent) && !/\)/.test(em.textContent)) // mismatched ()
-    ) return;
+      (/\(/.test(em.textContent) && !/\)/.test(em.textContent)) || // mismatched ()
+			(/bibliography/i.test(p.className)) || // <p class=bibliography>...
+			// bib citation starting with <em>...
+			(em.nodeName === 'EM'
+			  && p.textContent.length > em.textContent.length + 10
+			  && p.textContent.lenth < 156)
+    )) {
+			// not a header.
+
+			// Handle bib parts.
+			if (!bib) return;
+
+			// detect bib end
+			let text = p.textContent;
+			if ((/^\((\w+\.?\s*){2,5}\)$/.test(text) && text.length < 64) // (author j. name esq.)
+			  || /^originally published/i.test(text)
+				|| /^last updated/i.test(text)
+				|| /^This article is available in print/i.test(text)
+		  ) {
+				bibDone = true;
+			}
+
+			// Is it part of bib?
+			if (bib && !bibDone) {
+				bibdiv.appendChild(p);
+			}
+			return;
+		}
+
+		// a section after bib indicates bib is done
+		if (bib) bibDone = true;
 
     var newEl = document.createElement('h2');
     newEl.innerHTML = em.innerHTML || p.innerHTML;
 
-    console.log(111, newEl.textContent.length, newEl.textContent)
+    console.log('  #', newEl.textContent);
     if (newEl.textContent.length > 150) return;
 
-    if (!em.innerHTML) {
+    if (!em.innerHTML) {    //  <p><a name></a>fooo</p>
       p.innerHTML = '';
       p.appendChild(newEl);
     } else {
       p.replaceChild(newEl, em);
-      p.innerHTML = p.innerHTML.replace(/h2>\.\s*/, 'h2>'); // remove leading period
+      p.innerHTML = p.innerHTML.replace(/h2>\s*[\.:]\s*/, 'h2>'); // remove leading period & :
     }
 
-    if (/bibliography/i.test(em.innerText)) bib = p;
+    if (isbib || /bibliography/i.test(em.innerText)) {
+			bib = p;
+			let extras = bib.firstElementChild/* h2 */.innerHTML.replace(/^bibliography\W*/i, '');
+			if (extras.length > 10) bibdiv.innerHTML += `<p>(${extras.replace(/(&nbsp;|[:,;\)])*$/,'')})</p>`;
+		}
   });
 
+	if (bib) {
+		bib.parentNode.replaceChild(bibdiv, bib);
+		bibdiv.parentNode = bib.parentNode;
+		bib = bibdiv;
+	}
 
   //
   // citations of type (...<em>...</em>...) or (... pp?. ...) not containing <a>
@@ -72,10 +112,10 @@ function run() {
   contentPs.forEach(p => {
     p.innerHTML = p.innerHTML.replace(/\((.*?)\)/g, (a, m) => {
       let orig = `(${m})`;
-
       if (
         /<a\b/i.test(m) || // skip <a>'s
-        /^<em.*em>$/i.test(m) // skip (<em>foo</em>)
+        /^<em.*em>$/i.test(m) || // skip (<em>foo</em>)
+				m.replace(/<[^>]+>/g, '').length < 5  // too short (html stripped)
       ) {
         return orig;
       }
@@ -101,11 +141,11 @@ function run() {
     let ol = document.createElement('ol');
     ol.innerHTML = str;
 
-    let newbib = document.createElement('details');
-    newbib.setAttribute('open', '');
-    newbib.innerHTML = `<summary><b>Footnotes</b></summary>`;
-    bib.parentNode.insertBefore(newbib, bib);
-    newbib.appendChild(ol);
+    let footnote = document.createElement('details');
+    footnote.setAttribute('open', '');
+    footnote.innerHTML = `<summary><b>Footnote</b></summary>`;
+    bib.parentNode.insertBefore(footnote, bib);
+    footnote.appendChild(ol);
   }
 
   //
@@ -114,6 +154,64 @@ function run() {
   contentPs.forEach(p => {
     p.innerHTML = splitLongPs(latinize(p.innerHTML));
   });
+
+  //
+  // link (q.v.)
+  //
+	contentPs.forEach(p => {
+		let html = p.innerHTML;
+		html = html.replace(
+		  /(?<article>(\s+ʿ?[A-Z][\w-]+)+)\s+?\(q\.v\.\)/g,
+			(...args) => {
+				let { article } = args.pop();
+				article = article.trim();
+				let fa = /[-ʿ]/.test(article);
+				let url = fa ?
+				    article.replace(/(-e|ʿ)/g,'').replace(/\s+/g,'-').toLowerCase()
+				  : article.split(/\s+/).reverse().join('-').toLowerCase();
+
+				console.log(`  q.v.: ${article} > ${url}`);
+				return ` <a href="${url}" class="unverified" data-tag="q.v." title="q.v. guess!">${article.trim()}</a>`;
+			}
+		);
+		p.innerHTML = html;
+  });
+
+	// verify links (after a bit)
+	let links
+	setTimeout(() => {
+	  links = $$('#content a.unverified');
+		if (links.length) {
+			console.log(`  verifying ${links.length} q.v. links...`);
+			links.forEach(verifyLink);
+	  }
+	}, 1500);
+
+	function verifyLink(link, n) {
+		fetch(link.href).then(resp => {
+			if (resp.status === 404) {
+				console.log(`    %c✗%c ${link.href}`, 'color: red;', 'color:unset');
+
+				link.attempt = (link.attempt || 0) + 1;
+				switch (link.attempt) {
+					case 1:
+					// case 2: // last one
+					  link.href += '-parent';
+						verifyLink(link, n);
+					  break;
+					default:
+						// stop!
+				}
+			} else {
+				// success
+				link = links[n];
+				link.className = '';
+				link.title = 'q.v. verified';
+				console.log(`    %c✓%c ${link.href}`, 'color: green;', 'color:unset');
+			}
+
+		});
+	}
 
   //
   // dates:

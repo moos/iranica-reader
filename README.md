@@ -11,17 +11,19 @@ Install it from [Chrome web store](https://chrome.google.com/webstore/detail/ira
 ## List of features
 
 * Removes noisy transliteration diacritics (using [latinize](https://github.com/dundalek/latinize))
-* Makes section headers clearly visible
-* Moves in-text citation to linked footnote
-* Adds collapsible footnotes section at the end
+* Detects & makes section headers clearly visible
+* Moves in-text citation to collapsible footnotes section at the end
+* Collapse bibliography section
 * Collapse date and date ranges to only show Gregorian dates (Islamic dates are shown on mouse hover)
 * Splits long paragraphs
 * Larger font and wider paragraphs
 * Lightbox images using [strip](http://www.stripjs.com/)
+* Better print style
+* Autodetect q.v. links (to other EI articles)
 
 ### Features in the works
 * Options page (maybe?)
-* Handle `(q.v.)` refs
+* ~Handle `(q.v.)` refs~
 
 ## Caveats
 
@@ -31,6 +33,7 @@ If you notice something odd, temporarily disable the extension, or open the page
 
 ## Change log
 
+- 0.4.0 - Add print style sheet, collapsible bibliography, verified q.v. links.
 - 0.3.0 - Added lightbox image viewer
 - 0.1.2 - Initial version
 

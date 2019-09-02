@@ -7,16 +7,42 @@
 
 
 html body.iranica-reader #content.article {
- width: 720px;
- font-size: 17px;
- line-height: 1.3rem;
- float: none;
+  width: 720px;
+  font-size: 13pt;
+  line-height: 1.3rem;
+  float: none;
+}
+
+html body.iranica-reader #content.article sup {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
+}
+
+html body.iranica-reader #content.article h2 {
+  margin: 2em 0 1em;
+}
+html body.iranica-reader #content .bibliography {
+  font-size: 11pt;
+  line-height: 22px;
+}
+
+html body.iranica-reader #content a[data-tag="q.v."] {
+  text-decoration-color: rgba(76, 97, 10, 0.32);
+  text-decoration-style: wavy;
+}
+html body.iranica-reader #content a[data-tag="q.v."].unverified {
+  text-decoration-color: rgba(237, 97, 213, 0.32);
+}
+
+html body.iranica-reader #content p.p1 {
+  font-weight: bold;
 }
 
 html body.iranica-reader abbr[title] {
- text-decoration-line: underline;
- text-underline-position: under;
- text-decoration-color: #1fc08a;
+  text-decoration-line: underline;
+  text-underline-position: under;
+  text-decoration-color: #1fc08a;
 }
 
 .iranica-reader-marker {
@@ -46,6 +72,63 @@ html body.iranica-reader #sidebar.top-sidebar {
   margin-top: -30px;
   margin-left: 2em;
 }
+
 html body.iranica-reader #article-images {
   padding: 10px 20px;
+}
+
+html body.iranica-reader #content details {
+  margin-bottom: 3em;
+}
+
+html body.iranica-reader #content details summary b {
+  letter-spacing: .1em;
+}
+
+/**
+ * print media
+ */
+
+@media print {
+  @page {
+    margin: 1.5cm 1.5cm 1.5cm 2.5cm;
+  }
+  #sidebar.top-sidebar,
+  #navigation-sidebar {
+    display: none;
+  }
+
+  .iranica-reader-marker {
+    text-orientation: sideways-right;
+    writing-mode: vertical-rl;
+    opacity: 0.4;
+    margin-right: -4px;
+  }
+  #header h1 {
+    margin-top: -14px;
+  }
+  #search-bar ul {
+    font-size: .8em;
+  }
+  #content-wrap {
+    font-size: 15pt;
+    padding: 2em;
+  }
+  #article-overview h1 {
+    font-size: 22pt;
+    margin-top: -1em;
+  }
+  #sidebar {
+    font-size: .8em;
+    width: 75vw;
+  }
+  #sidebar #article-images {
+  }
+  #sidebar #article-images img {
+    width: 2.5in !important;
+    height: unset !important;
+  }
+  #footer {
+    font-size: .8em;
+  }
 }
